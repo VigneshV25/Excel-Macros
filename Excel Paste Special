@@ -1,0 +1,44 @@
+Sub SuperPaste()
+
+
+''' Clipboard source is a current-instance excel cut:
+
+''' - only option is to paste all (or throw an error msg)
+
+If Application.CutCopyMode = xlCut Then
+
+ActiveSheet.Paste
+
+
+''' Clipboard source is a current-instance excel copy:
+
+''' - paste values only (keeps destination formats)
+
+''' - am pasting to the activecell to avoid mis-matched source and destination selections
+
+ElseIf Application.CutCopyMode = xlCopy Then
+
+ActiveWindow.ActiveCell.PasteSpecial xlPasteValues
+
+
+''' Clipboard is empty: report to user
+
+ElseIf Application.ClipboardFormats(1) = -1 Then
+
+MsgBox "Nothing has been copied."
+
+ 
+
+''' Clipboard source is another application (including another instance of excel):
+
+''' - paste text (same as paste values for excel)
+
+''' - still retains numbers (if tabbed or tabled apart) from word, html, another instance of excel, etc.
+
+Else: ActiveSheet.PasteSpecial Format:="Text"
+
+End If
+
+ 
+
+End Sub
